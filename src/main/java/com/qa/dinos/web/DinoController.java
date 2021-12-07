@@ -41,20 +41,21 @@ public class DinoController {
 
 	@GetMapping("/get/{id}") // 200
 	public Dinosaur getDino(@PathVariable Integer id) {
-		System.out.println("ID: " + id);
-		return null;
+		return this.dinos.get(id);
 	}
 
 	@PutMapping("/replace/{id}") // 202 - Accepted
-	public Dinosaur replaceDino(@PathVariable Integer id, @RequestBody Dinosaur newDino) {
-		System.out.println("ID: " + id);
-		System.out.println("DINO: " + newDino);
+	public ResponseEntity<Dinosaur> replaceDino(@PathVariable Integer id, @RequestBody Dinosaur newDino) {
+		Dinosaur body = this.dinos.set(id, newDino);
 
-		return null;
+		ResponseEntity<Dinosaur> response = new ResponseEntity<Dinosaur>(body, HttpStatus.ACCEPTED);
+		return response;
 	}
 
 	@DeleteMapping("/remove/{id}") // 204
-	public void removeDino(@PathVariable Integer id) {
-		System.out.println("ID: " + id);
+	public ResponseEntity<?> removeDino(@PathVariable Integer id) {
+		this.dinos.remove(id.intValue());
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }
