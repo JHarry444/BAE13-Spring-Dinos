@@ -3,6 +3,8 @@ package com.qa.dinos.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,25 +26,26 @@ public class DinoController {
 		return "Hello, World!";
 	}
 
-	@PostMapping("/create")
-	public Dinosaur createDinosaur(@RequestBody Dinosaur dino) {
+	@PostMapping("/create") // 201 - Created
+	public ResponseEntity<Dinosaur> createDinosaur(@RequestBody Dinosaur dino) {
 		this.dinos.add(dino);
 		Dinosaur created = this.dinos.get(this.dinos.size() - 1);
-		return created;
+		ResponseEntity<Dinosaur> response = new ResponseEntity<Dinosaur>(created, HttpStatus.CREATED);
+		return response;
 	}
 
-	@GetMapping("/getAll")
-	public List<Dinosaur> getAllDinos() {
-		return this.dinos;
+	@GetMapping("/getAll") // 200
+	public ResponseEntity<List<Dinosaur>> getAllDinos() {
+		return ResponseEntity.ok(this.dinos);
 	}
 
-	@GetMapping("/get/{id}")
+	@GetMapping("/get/{id}") // 200
 	public Dinosaur getDino(@PathVariable Integer id) {
 		System.out.println("ID: " + id);
 		return null;
 	}
 
-	@PutMapping("/replace/{id}")
+	@PutMapping("/replace/{id}") // 202 - Accepted
 	public Dinosaur replaceDino(@PathVariable Integer id, @RequestBody Dinosaur newDino) {
 		System.out.println("ID: " + id);
 		System.out.println("DINO: " + newDino);
@@ -50,7 +53,7 @@ public class DinoController {
 		return null;
 	}
 
-	@DeleteMapping("/remove/{id}")
+	@DeleteMapping("/remove/{id}") // 204
 	public void removeDino(@PathVariable Integer id) {
 		System.out.println("ID: " + id);
 	}
