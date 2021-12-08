@@ -2,6 +2,7 @@ package com.qa.dinos.web;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +21,13 @@ import com.qa.dinos.service.DinoService;
 public class DinoController {
 
 	private DinoService service;
+
+	@Autowired // tells Spring to fetch the DinoService from the context
+				// Dependency Injection
+	public DinoController(DinoService service) {
+		super();
+		this.service = service;
+	}
 
 	@GetMapping("/hello") // endpoint
 	public String hello() {
