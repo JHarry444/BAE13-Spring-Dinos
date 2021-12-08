@@ -1,6 +1,5 @@
 package com.qa.dinos.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -14,12 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.qa.dinos.domain.Dinosaur;
+import com.qa.dinos.service.DinoService;
 
 @RestController // tells Spring this is a controller
 				// REST compliant
 public class DinoController {
 
-	private List<Dinosaur> dinos = new ArrayList<>();
+	private DinoService service;
 
 	@GetMapping("/hello") // endpoint
 	public String hello() {
@@ -28,25 +28,24 @@ public class DinoController {
 
 	@PostMapping("/create") // 201 - Created
 	public ResponseEntity<Dinosaur> createDinosaur(@RequestBody Dinosaur dino) {
-		this.dinos.add(dino);
-		Dinosaur created = this.dinos.get(this.dinos.size() - 1);
+		Dinosaur created = this.service.createDinosaur(dino);
 		ResponseEntity<Dinosaur> response = new ResponseEntity<Dinosaur>(created, HttpStatus.CREATED);
 		return response;
 	}
 
 	@GetMapping("/getAll") // 200
 	public ResponseEntity<List<Dinosaur>> getAllDinos() {
-		return ResponseEntity.ok(this.dinos);
+		return ResponseEntity.ok(this.service.getAllDinos());
 	}
 
 	@GetMapping("/get/{id}") // 200
 	public Dinosaur getDino(@PathVariable Integer id) {
-		return this.dinos.get(id);
+		return this.service.getDino(id);
 	}
 
 	@PutMapping("/replace/{id}") // 202 - Accepted
 	public ResponseEntity<Dinosaur> replaceDino(@PathVariable Integer id, @RequestBody Dinosaur newDino) {
-		Dinosaur body = this.dinos.set(id, newDino);
+		Dinosaur body = this.service.replaceDino(id, newDino);
 
 		ResponseEntity<Dinosaur> response = new ResponseEntity<Dinosaur>(body, HttpStatus.ACCEPTED);
 		return response;
@@ -54,7 +53,7 @@ public class DinoController {
 
 	@DeleteMapping("/remove/{id}") // 204
 	public ResponseEntity<?> removeDino(@PathVariable Integer id) {
-		this.dinos.remove(id.intValue());
+		this.service.removeDino(id);
 
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
