@@ -3,11 +3,8 @@ package com.qa.dinos.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.qa.dinos.domain.Dinosaur;
 
-@Service
 public class DinoServiceList implements DinoService {
 
 	private List<Dinosaur> dinos = new ArrayList<>();
@@ -27,6 +24,12 @@ public class DinoServiceList implements DinoService {
 	@Override
 	public Dinosaur getDino(Integer id) {
 		return this.dinos.get(id);
+	}
+
+	@Override
+	public List<Dinosaur> getAllDinosByType(String type) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

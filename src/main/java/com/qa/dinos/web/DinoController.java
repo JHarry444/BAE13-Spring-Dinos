@@ -51,6 +51,12 @@ public class DinoController {
 		return this.service.getDino(id);
 	}
 
+	@GetMapping("/getByType/{type}")
+	public ResponseEntity<List<Dinosaur>> getDinoByType(@PathVariable String type) {
+		List<Dinosaur> found = this.service.getAllDinosByType(type);
+		return ResponseEntity.ok(found);
+	}
+
 	@PutMapping("/replace/{id}") // 202 - Accepted
 	public ResponseEntity<Dinosaur> replaceDino(@PathVariable Integer id, @RequestBody Dinosaur newDino) {
 		Dinosaur body = this.service.replaceDino(id, newDino);

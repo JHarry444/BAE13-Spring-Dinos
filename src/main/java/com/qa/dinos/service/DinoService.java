@@ -10,6 +10,8 @@ public interface DinoService {
 
 	List<Dinosaur> getAllDinos();
 
+	List<Dinosaur> getAllDinosByType(String type);
+
 	Dinosaur getDino(Integer id);
 
 	Dinosaur replaceDino(Integer id, Dinosaur newDino);
