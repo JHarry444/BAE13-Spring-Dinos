@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -19,6 +22,8 @@ import com.qa.dinos.domain.Dinosaur;
 // boots the entire context - random port to avoid collisions (two apps running on the same)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc // sets up the MockMVC object
+@Sql(scripts = { "classpath:dino-schema.sql",
+		"classpath:dino-data.sql" }, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 public class DinoControllerIntegrationTest {
 
 	@Autowired // pulls the MockMVC object from the context
@@ -31,9 +36,24 @@ public class DinoControllerIntegrationTest {
 	void testCreate() throws Exception {
 		Dinosaur testDino = new Dinosaur(null, "Carnivorous", 300, "T-Rex", 200);
 		String testDinoAsJSON = this.mapper.writeValueAsString(testDino);
-		RequestBuilder req = post("/create").content(testDinoAsJSON);
+		RequestBuilder req = post("/create").contentType(MediaType.APPLICATION_JSON).content(testDinoAsJSON);
 
-		Dinosaur testCreatedDino = new Dinosaur(1, "Carnivorous", 300, "T-Rex", 200);
+		Dinosaur testCreatedDino = new Dinosaur(2, "Carnivorous", 300, "T-Rex", 200);
+		String testCreatedDinoAsJSON = this.mapper.writeValueAsString(testCreatedDino);
+		ResultMatcher checkStatus = status().isCreated(); // is status 201 - created
+		ResultMatcher checkBody = content().json(testCreatedDinoAsJSON); // does the body match my testCreatedDinoAsJSON
+
+		// sends request - checks the status - checks the body
+		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+
+	@Test
+	void testCreate2() throws Exception {
+		Dinosaur testDino = new Dinosaur(null, "Carnivorous", 300, "T-Rex", 200);
+		String testDinoAsJSON = this.mapper.writeValueAsString(testDino);
+		RequestBuilder req = post("/create").contentType(MediaType.APPLICATION_JSON).content(testDinoAsJSON);
+
+		Dinosaur testCreatedDino = new Dinosaur(2, "Carnivorous", 300, "T-Rex", 200);
 		String testCreatedDinoAsJSON = this.mapper.writeValueAsString(testCreatedDino);
 		ResultMatcher checkStatus = status().isCreated(); // is status 201 - created
 		ResultMatcher checkBody = content().json(testCreatedDinoAsJSON); // does the body match my testCreatedDinoAsJSON
