@@ -27,6 +27,23 @@ public class Dinosaur {
 		super();
 	}
 
+	public Dinosaur(String diet, Integer numTeeth, String type, Integer height) {
+		super();
+		this.diet = diet;
+		this.numTeeth = numTeeth;
+		this.type = type;
+		this.height = height;
+	}
+
+	public Dinosaur(Integer id, String diet, Integer numTeeth, String type, Integer height) {
+		super();
+		this.id = id;
+		this.diet = diet;
+		this.numTeeth = numTeeth;
+		this.type = type;
+		this.height = height;
+	}
+
 	public Integer getId() {
 		return this.id;
 	}
