@@ -1,7 +1,9 @@
 package com.qa.dinos.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -76,5 +78,50 @@ public class DinoControllerIntegrationTest {
 		ResultMatcher checkBody = content().json(json);
 
 		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+
+	@Test
+	void getByIdTest() throws Exception {
+		RequestBuilder req = get("/get/1");
+
+		String json = this.mapper.writeValueAsString(new Dinosaur(1, "Carnivorous", 200, "Spinosaurus", 300));
+
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().json(json);
+
+		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+
+	@Test
+	void getByTypeTest() throws Exception {
+		RequestBuilder req = get("/getByType/Spinosaurus");
+
+		List<Dinosaur> testDinos = List.of(new Dinosaur(1, "Carnivorous", 200, "Spinosaurus", 300));
+		String json = this.mapper.writeValueAsString(testDinos);
+
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().json(json);
+
+		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+
+	@Test
+	void testReplace() throws Exception {
+		Dinosaur testDino = new Dinosaur(null, "Herbivorous", 150, "Triceratops", 200);
+		String testDinoAsJSON = this.mapper.writeValueAsString(testDino);
+		RequestBuilder req = put("/replace/1").contentType(MediaType.APPLICATION_JSON).content(testDinoAsJSON);
+
+		Dinosaur testCreatedDino = new Dinosaur(1, "Herbivorous", 150, "Triceratops", 200);
+		String testCreatedDinoAsJSON = this.mapper.writeValueAsString(testCreatedDino);
+		ResultMatcher checkStatus = status().isAccepted(); // is status 202 - accepted
+		ResultMatcher checkBody = content().json(testCreatedDinoAsJSON); // does the body match my testCreatedDinoAsJSON
+
+		// sends request - checks the status - checks the body
+		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+
+	@Test
+	void testDelete() throws Exception {
+		this.mvc.perform(delete("/remove/1")).andExpect(status().isNoContent());
 	}
 }
