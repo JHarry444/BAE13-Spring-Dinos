@@ -67,15 +67,14 @@ public class DinoControllerIntegrationTest {
 
 	@Test
 	void getAllTest() throws Exception {
+		RequestBuilder req = get("/getAll");
+
 		List<Dinosaur> testDinos = List.of(new Dinosaur(1, "Carnivorous", 200, "Spinosaurus", 300));
 		String json = this.mapper.writeValueAsString(testDinos);
-		
-		
-		RequestBuilder req = get("/getAll");
-		
+
 		ResultMatcher checkStatus = status().isOk();
 		ResultMatcher checkBody = content().json(json);
-		
+
 		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
 	}
 }
