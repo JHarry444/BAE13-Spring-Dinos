@@ -1,8 +1,11 @@
 package com.qa.dinos.web;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +62,20 @@ public class DinoControllerIntegrationTest {
 		ResultMatcher checkBody = content().json(testCreatedDinoAsJSON); // does the body match my testCreatedDinoAsJSON
 
 		// sends request - checks the status - checks the body
+		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+
+	@Test
+	void getAllTest() throws Exception {
+		List<Dinosaur> testDinos = List.of(new Dinosaur(1, "Carnivorous", 200, "Spinosaurus", 300));
+		String json = this.mapper.writeValueAsString(testDinos);
+		
+		
+		RequestBuilder req = get("/getAll");
+		
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().json(json);
+		
 		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
 	}
 }
