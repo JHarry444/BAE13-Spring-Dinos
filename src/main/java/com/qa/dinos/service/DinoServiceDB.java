@@ -4,12 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.qa.dinos.domain.Dinosaur;
 import com.qa.dinos.repo.DinoRepo;
 
-@Service
 public class DinoServiceDB implements DinoService {
 
 	private DinoRepo repo;

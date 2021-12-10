@@ -3,8 +3,11 @@ package com.qa.dinos.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.qa.dinos.domain.Dinosaur;
 
+@Service
 public class DinoServiceList implements DinoService {
 
 	private List<Dinosaur> dinos = new ArrayList<>();
