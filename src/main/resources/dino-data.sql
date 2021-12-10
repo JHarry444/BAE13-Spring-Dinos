@@ -8,4 +8,14 @@ INSERT INTO `dinosaur` (
 	300, 
 	200, 
 	'Spinosaurus'
+), (
+	'Herbivorous', 
+	150, 
+	150, 
+	'Triceratops'
+), (
+	'Omnivorous', 
+	100, 
+	200, 
+	'Basilosaurus'
 );

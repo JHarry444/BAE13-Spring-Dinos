@@ -43,7 +43,7 @@ public class DinoControllerIntegrationTest {
 		String testDinoAsJSON = this.mapper.writeValueAsString(testDino);
 		RequestBuilder req = post("/create").contentType(MediaType.APPLICATION_JSON).content(testDinoAsJSON);
 
-		Dinosaur testCreatedDino = new Dinosaur(2, "Carnivorous", 300, "T-Rex", 200);
+		Dinosaur testCreatedDino = new Dinosaur(4, "Carnivorous", 300, "T-Rex", 200);
 		String testCreatedDinoAsJSON = this.mapper.writeValueAsString(testCreatedDino);
 		ResultMatcher checkStatus = status().isCreated(); // is status 201 - created
 		ResultMatcher checkBody = content().json(testCreatedDinoAsJSON); // does the body match my testCreatedDinoAsJSON
@@ -58,7 +58,7 @@ public class DinoControllerIntegrationTest {
 		String testDinoAsJSON = this.mapper.writeValueAsString(testDino);
 		RequestBuilder req = post("/create").contentType(MediaType.APPLICATION_JSON).content(testDinoAsJSON);
 
-		Dinosaur testCreatedDino = new Dinosaur(2, "Carnivorous", 300, "T-Rex", 200);
+		Dinosaur testCreatedDino = new Dinosaur(4, "Carnivorous", 300, "T-Rex", 200);
 		String testCreatedDinoAsJSON = this.mapper.writeValueAsString(testCreatedDino);
 		ResultMatcher checkStatus = status().isCreated(); // is status 201 - created
 		ResultMatcher checkBody = content().json(testCreatedDinoAsJSON); // does the body match my testCreatedDinoAsJSON
@@ -71,7 +71,9 @@ public class DinoControllerIntegrationTest {
 	void getAllTest() throws Exception {
 		RequestBuilder req = get("/getAll");
 
-		List<Dinosaur> testDinos = List.of(new Dinosaur(1, "Carnivorous", 200, "Spinosaurus", 300));
+		List<Dinosaur> testDinos = List.of(new Dinosaur(1, "Carnivorous", 200, "Spinosaurus", 300),
+				new Dinosaur(2, "Herbivorous", 150, "Triceratops", 150),
+				new Dinosaur(3, "Omnivorous", 200, "Basilosaurus", 100));
 		String json = this.mapper.writeValueAsString(testDinos);
 
 		ResultMatcher checkStatus = status().isOk();
